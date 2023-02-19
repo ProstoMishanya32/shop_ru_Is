@@ -1,0 +1,39 @@
+WARNING | 2023-02-19 21:35:02,522 | run.py:17 | Бот вошел в сеть
+ERROR | 2023-02-19 21:46:20,464 | dispatcher.py:390 | Cause exception while getting updates.
+Traceback (most recent call last):
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\bot\bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\bot\api.py", line 139, in make_request
+    async with session.post(url, data=req, **kwargs) as response:
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\client.py", line 1141, in __aenter__
+    self._resp = await self._coro
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\client.py", line 560, in _request
+    await resp.start(conn)
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\client_reqrep.py", line 894, in start
+    with self._timer:
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\helpers.py", line 721, in __exit__
+    raise asyncio.TimeoutError from None
+asyncio.exceptions.TimeoutError
+ERROR | 2023-02-19 21:56:09,451 | dispatcher.py:390 | Cause exception while getting updates.
+Traceback (most recent call last):
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 381, in start_polling
+    updates = await self.bot.get_updates(
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\bot\bot.py", line 110, in get_updates
+    result = await self.request(api.Methods.GET_UPDATES, payload)
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\bot\base.py", line 236, in request
+    return await api.make_request(await self.get_session(), self.server, self.__token, method, data, files,
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiogram\bot\api.py", line 139, in make_request
+    async with session.post(url, data=req, **kwargs) as response:
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\client.py", line 1141, in __aenter__
+    self._resp = await self._coro
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\client.py", line 560, in _request
+    await resp.start(conn)
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\client_reqrep.py", line 894, in start
+    with self._timer:
+  File "C:\Users\prost\PycharmProjects\TelegramBot_israel\venv\lib\site-packages\aiohttp\helpers.py", line 721, in __exit__
+    raise asyncio.TimeoutError from None
+asyncio.exceptions.TimeoutError

@@ -1,0 +1,19 @@
+{
+    "created_time": "02/15/23 -- 19:18:24",
+    "bot": {
+        "token": "6069344142:AAG8jH30U4d9IuNt0DIQhMp51eEG7vt0GN8",
+        "admins": [
+            {
+                "user_id": 795472601,
+                "nickname": "Мишаня Маслёный"
+            }
+        ],
+        "main_admin": 5689929885
+    },
+    "logs": {
+        "main_path_logs": "data/logs/"
+    },
+    "main_db": {
+        "main_db": "./data/main_db.db"
+    }
+}

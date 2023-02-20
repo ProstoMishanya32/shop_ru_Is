@@ -11,3 +11,21 @@ def select_lang():
     ).add(InlineKeyboardButton("🇷🇺 Русский", callback_data="select_lang:ru")
     ).add(InlineKeyboardButton("🇮🇱 עִברִית", callback_data= "select_lang:il"))
     return keyboard
+
+def item_open(item_id, category_id, remover, check):
+    if check == 'ru':
+        keyboard = InlineKeyboardMarkup(
+        ).add(
+            InlineKeyboardButton("💰 Купить товар", callback_data=f"buy_item_open_finl:{item_id}:{remover}")
+        ).add(
+            InlineKeyboardButton("⬅ Вернуться ↩", callback_data=f"buy_category_open:{category_id}:{remover}")
+        )
+    else:
+        keyboard = InlineKeyboardMarkup(
+        ).add(
+            InlineKeyboardButton("💰 Купить товар", callback_data=f"buy_item_open_finl:{item_id}:{remover}")
+        ).add(
+            InlineKeyboardButton("⬅ חזרה ↩", callback_data=f"buy_category_open:{category_id}:{remover}")
+        )
+
+    return keyboard

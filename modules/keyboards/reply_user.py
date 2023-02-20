@@ -12,7 +12,7 @@ def menu(user_id):
         keyboard.row("🛒 עגלת קניות", "📪 Мои заказы")
         keyboard.row("🇮🇱 שנה שפה 🇷🇺")
         if user_id in json_logic.get_admins() or user_id == main_config.bot.main_admin:
-            keyboard.add('🎁 ניהול סחורה', '🕐 היסטוריית הזמנות')
+            keyboard.add('🎁 ניהול סחורה', '🕐 היסטוריית הזמנות', 'קביעת הנחה 💲')
         if user_id == main_config.bot.main_admin:
             keyboard.add("🧑‍✈️ מנהלים")
     else:
@@ -20,7 +20,7 @@ def menu(user_id):
         keyboard.row("🛒 Корзина", "📪 Мои заказы")
         keyboard.row("🇮🇱 Сменить язык 🇷🇺")
         if user_id in json_logic.get_admins() or user_id == main_config.bot.main_admin:
-            keyboard.add('🎁 Управление товарами', '🕐 История заказов')
+            keyboard.add('🎁 Управление товарами', '🕐 История заказов', 'Установление скидки 💲')
         if user_id == main_config.bot.main_admin:
             keyboard.add("🧑‍✈️ Администаторы")
     return keyboard

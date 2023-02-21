@@ -175,9 +175,144 @@ async def user_shop(message: Message, state: FSMContext):
     check = db.check_user(message.from_user.id)
     try:
         if int(message.text) <= 0:
-            await message.answer("ДОЛБАЕБ, ТЕБЯ ПРОСИЛИ БЛЯТЬ ВВЕСТИ КОЛИЧЕСТВА ТОВАРА, КАКОЕ НАХУЙ 0 ЕБАНАТ?")
+            if check == 'ru':
+                await message.answer("<b>Введите положительное число, которое не равно нулю</b>")
+            else:
+                await message.answer("<b>הזן מספר חיובי שאינו אפס< / b>")
         else:
-            await message.answer("Ладно, красавчик")
+            if check == 'ru':
+                await message.answer("<b>Введите  процент скидки</b>")
+            else:
+                await message.answer("< b>הזן אחוז הנחה< / b>")
     except ValueError:
-        await message.answer("ДОЛБАЕБ, ТЕБЯ ПРОСИЛИ БЛЯТЬ ВВЕСТИ КОЛИЧЕСТВА ТОВАРА, КАКОЙ НАХУЙ ТЕКСТ ДЯДЕЛ?")
+        if check == 'ru':
+            await message.answer("<b>Введите число!</b>")
+        else:
+            await message.answer("< b>הזן מספר!</b>")
 
+
+#Установление скидки на товар
+@dp.message_handler(text = ['Установление скидки 💲', 'קביעת הנחה 💲'], state = "*")
+async def get_discout(message: Message, state: FSMContext):
+    check = db.check_user(message.from_user.id)
+    if len(db.get_all_info('category')) >= 1:
+        if check == 'ru':
+            await message.answer("<b>🎁 Выберите категорию товара:</b>", reply_markup=inline_page.item_category_swipe_fp_discount(0, check))
+        else:
+            await message.answer("<b>🎁 בחר קטגוריית מוצרים:</b>",  reply_markup=inline_page.item_category_swipe_fp_discount(0, check))
+    else:
+        if check == 'ru':
+            await message.answer("<b>🎁 Увы, товары в данное время отсутствуют.</b>")
+        else:
+            await message.answer("<b>🎁 אבוי, כרגע אין מוצרים.</b>")
+
+
+#Следующая страница выбора категории
+@dp.callback_query_handler(text_startswith="buy_category_swipe_discout:", state="*")
+async def user_category_next_page_discout(call: CallbackQuery, state: FSMContext):
+    remover = int(call.data.split(":")[1])
+    check = db.check_user(call.from_user.id)
+    if check == 'ru':
+        await call.message.edit_text("<b>🎁 Выберите категорию товара:</b>", reply_markup=inline_page.item_category_swipe_fp_discount(remover, check))
+    else:
+        await call.message.edit_text("<b>🎁 בחר קטגוריית מוצרים:</b>", reply_markup=inline_page.item_category_swipe_fp_discount(remover, check))
+
+@dp.callback_query_handler(text_startswith="buy_category_open_discout:", state="*")
+async def user_purchase_category_open(call: CallbackQuery, state: FSMContext):
+    category_id = call.data.split(":")[1]
+    remover = int(call.data.split(":")[2])
+    check = db.check_user(call.from_user.id)
+
+    get_category = db.get_category(category_id=category_id)
+    get_item = db.get_item(category_id=category_id)
+    try:
+        count = len(get_item)
+    except TypeError:
+        count = 0
+    if count >= 1:
+        with suppress(MessageCantBeDeleted):
+            await call.message.delete()
+        if check == 'ru':
+            await call.message.answer(f"<b>🎁 Текущая категория: <code>{get_category['category_name']}</code></b>", reply_markup=inline_page.item_swipe_fp_discout(remover, category_id, check))
+        else:
+            await call.message.answer(f"<b>🎁 קטגוריה נוכחית: <code>{get_category['category_name']}</code></b>", reply_markup=inline_page.item_swipe_fp_discout(remover, category_id, check))
+    else:
+        if remover == "0":
+            if check == 'ru':
+                await call.message.edit_text("<b>🎁 Увы, товары в данное время отсутствуют.</b>")
+                await call.answer("❗ Товары были изменены или удалены")
+            else:
+                await call.message.edit_text("<b>🎁 אבוי, כרגע אין מוצרים.</b>")
+                await call.answer("❗ Товары были изменены или удалены")
+        else:
+            if check == 'ru':
+                await call.answer(f"❕ Товары в категории {get_category['category_name']} отсутствуют")
+            else:
+                await call.answer(f"❕ אין מוצרים בקטגוריה {get_category['category_name']}")
+
+@dp.callback_query_handler(text_startswith="buy_item_open_discout:", state="*")
+async def user_discout_get(call: CallbackQuery, state: FSMContext):
+    item_id = call.data.split(":")[1]
+    category_id = call.data.split(":")[2]
+    remover = int(call.data.split(":")[3])
+
+    check = db.check_user(call.from_user.id)
+    get_item = db.get_item(item_id=item_id)
+    get_category = db.get_category(category_id=category_id)
+
+    await state.update_data(cache_item_id = item_id)
+    await state.update_data(cache_category_id = category_id)
+    await state.update_data(cache_remover  = remover)
+    await state.set_state("get_len_items")
+    if check == 'ru':
+        await call.message.edit_text("<b>От какого количества товара должна начинаться скидка? 📦</b>", reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+    else:
+        await call.message.edit_text("<b > מאיזה כמות של מוצר צריך להתחיל הנחה? 📦</b>",   reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+
+@dp.message_handler(state="get_len_items")
+async def get_discount(message: Message, state: FSMContext):
+    check = db.check_user(message.from_user.id)
+    await state.update_data(cache_len_items=message.text)
+    async with state.proxy() as data:
+        item_id = data['cache_item_id']
+        category_id = data['cache_category_id']
+        remover = data['cache_remover']
+    try:
+        if int(message.text) <= 0:
+            if check == 'ru':
+                await message.answer("<b>Введите положительное число, которое не равно нулю</b>", reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+            else:
+                await message.answer("<b>הזן מספר חיובי שאינו אפס< / b>", reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+        else:
+            await state.set_state("get_discout")
+            if check == 'ru':
+                await message.answer("<b>Введите  процент скидки</b>", reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+            else:
+                await message.answer("< b>הזן אחוז הנחה< / b>", reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+    except ValueError:
+        if check == 'ru':
+            await message.answer("<b>Введите число!</b>",reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+        else:
+            await message.answer("< b>הזן מספר!</b>", reply_markup=inline_user.get_discount(item_id, category_id, remover, check))
+
+@dp.message_handler(state="get_discout")
+async def get_discount(message: Message, state: FSMContext):
+    check = db.check_user(message.from_user.id)
+    async with state.proxy() as data:
+        item_id = data['cache_item_id']
+        len_items = data['cache_len_items']
+    try:
+        if int(message.text) <= 0:
+            if check == 'ru':
+                await message.answer("<b>Введите положительное число, которое не равно нулю</b>")
+            else:
+                await message.answer("<b>הזן מספר חיובי שאינו אפס< / b>")
+        else:
+            db.add_discout(int(message.text), len_items, item_id)
+            await message.answer("Успешно!")
+
+    except ValueError:
+        if check == 'ru':
+            await message.answer("<b>Введите число!</b>")
+        else:
+            await message.answer("< b>הזן מספר!</b>")

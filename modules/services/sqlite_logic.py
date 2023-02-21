@@ -55,7 +55,9 @@ class DataBase:
         item_price INTEGER,
         item_description TEXT,
         item_photo TEXT,
-        category_id INTEGER)""")
+        category_id INTEGER,
+        discount_len_item INTEGER,
+        discount INTEGER)""")
 
         #Данные о покупках
         self.cur.execute("""
@@ -68,20 +70,6 @@ class DataBase:
         purchase_item_id INTEGER,
         purchase_item_name TEXT,
         purchase_date TEXT)""")
-
-        #БД с промокодами
-        self.cur.execute("""
-        CREATE TABLE  IF NOT EXISTS 
-        promocode(
-        promocode_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        promocode TEXT,
-        user_id INTEGER,
-        item__id INTEGER,
-        item_name TEXT,
-        all_items INTEGER,
-        discount INT,
-        use_count INT,
-        one_use INT)""")
 
         self.connection.commit()
         print(colorama.Fore.RED + "--- Базы данных подключены ---")
@@ -191,4 +179,9 @@ class DataBase:
             self.connection.commit()
             item_id = self.cur.execute('SELECT item_id FROM items').fetchall()
             return item_id[-1]['item_id']
+
+    def add_discout(self, discout, len_item, item_id):
+            self.cur.row_factory = dict_factory
+            self.cur.execute("UPDATE items SET (discount_len_item, discount) = (?, ?) WHERE item_id = ?", (len_item, discout, item_id))
+            self.connection.commit()
 

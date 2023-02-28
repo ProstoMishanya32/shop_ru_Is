@@ -185,3 +185,13 @@ class DataBase:
             self.cur.execute("UPDATE items SET (discount_len_item, discount) = (?, ?) WHERE item_id = ?", (len_item, discout, item_id))
             self.connection.commit()
 
+
+    def get_discout(self, item_id):
+        self.cur.row_factory = dict_factory
+        data = self.cur.execute("SELECT discount_len_item, discount FROM items  WHERE item_id = ?",  (item_id,)).fetchone()
+        return data
+
+    def get_users(self):
+        self.cur.row_factory = dict_factory
+        data = self.cur.execute("SELECT * FROM users").fetchall()
+        return data

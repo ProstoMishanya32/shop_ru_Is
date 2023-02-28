@@ -6,8 +6,7 @@ def category_edit(category_id, remover, check):
     if check == 'ru':
         keyboard = InlineKeyboardMarkup(
         ).add(
-            ikb("🏷 Изм. название", callback_data=f"category_edit_name:{category_id}:{remover}"),
-            ikb("📁 Добавить позицию", callback_data=f"position_create_open:{category_id}"),
+            ikb("🏷 Изм. название", callback_data=f"category_edit_name:{category_id}:{remover}")
         ).add(
             ikb("⬅ Вернуться ↩", callback_data=f"catategory_edit_swipe:{remover}"),
             ikb("❌ Удалить", callback_data=f"category_edit_delete:{category_id}:{remover}")
@@ -15,8 +14,7 @@ def category_edit(category_id, remover, check):
     else:
         keyboard = InlineKeyboardMarkup(
         ).add(
-            ikb("🏷 שנה שֵׁם", callback_data=f"category_edit_name:{category_id}:{remover}"),
-            ikb("📁 הוסף עמדה", callback_data=f"position_create_open:{category_id}"),
+            ikb("🏷 שנה שֵׁם", callback_data=f"category_edit_name:{category_id}:{remover}")
         ).add(
             ikb("⬅ חזרה ↩", callback_data=f"catategory_edit_swipe:{remover}"),
             ikb("❌ מחק", callback_data=f"category_edit_delete:{category_id}:{remover}")
@@ -161,3 +159,19 @@ def item_edit_clear_all(item_id, category_id, remover, check):
     return keyboard
 
 
+def change_texts(text_category):
+    keyboard = InlineKeyboardMarkup(
+    ).add(
+        ikb("🇷🇺", callback_data=f"change_text:ru:{text_category}"),
+        ikb("🇮🇱", callback_data=f"change_text:il:{text_category}")
+    )
+    return keyboard
+
+
+def alerts_confirm():
+    keyboard = InlineKeyboardMarkup(
+    ).add(
+        ikb("✅", callback_data=f"alerts_confirm:yes"),
+        ikb("❌", callback_data=f"alerts_confirm:no")
+    )
+    return keyboard

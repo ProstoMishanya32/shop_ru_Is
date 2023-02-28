@@ -34,4 +34,22 @@ def admin__edit_products(check):
         keyboard.row("⬅ Главное меню")
     return keyboard
 
+def admin__edit_texts(check):
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+    if check == "il":
+        keyboard.row("תמיכה", "הערוץ שלנו")
+        keyboard.row("לְבַטֵל")
+    else:
+        keyboard.row("Поддержка", "Наш канал")
+        keyboard.row("Отмена")
+    return keyboard
+
+def admin__edit_texts_cancel(check):
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+    if check == "il":
+        keyboard.row("לְבַטֵל")
+    else:
+        keyboard.row("Отмена")
+    return keyboard
+
 

@@ -32,14 +32,20 @@ def item_open(item_id, category_id, remover, check):
 
 def get_discount(item_id, category_id, remover, check):
     if check == 'ru':
-        keyboard = InlineKeyboardMarkup(
-        ).add(
-            InlineKeyboardButton("⬅ Вернуться ↩", callback_data=f"buy_category_open_discout:{category_id}:{remover}")
-        )
+        keyboard = InlineKeyboardMarkup().add(
+            InlineKeyboardButton("⬅ Вернуться ↩", callback_data=f"buy_category_open_discout:{category_id}:{remover}"))
     else:
-        keyboard = InlineKeyboardMarkup(
-        ).add(
-            InlineKeyboardButton("⬅ חזרה ↩", callback_data=f"buy_category_open_discout:{category_id}:{remover}")
-        )
+        keyboard = InlineKeyboardMarkup().add(
+            InlineKeyboardButton("⬅ חזרה ↩", callback_data=f"buy_category_open_discout:{category_id}:{remover}"))
+    return keyboard
 
+def buy_item(check):
+    if check == 'ru':
+        keyboard = InlineKeyboardMarkup().add(
+            InlineKeyboardButton("✅", callback_data=f"buy_item_final:yes")).insert(
+            InlineKeyboardButton("❌", callback_data=f"buy_item_final:no"))
+    else:
+        keyboard = InlineKeyboardMarkup().add(
+            InlineKeyboardButton("❌", callback_data=f"buy_item_final:yes")).insert(
+            InlineKeyboardButton("✅", callback_data=f"buy_item_final:no"))
     return keyboard

@@ -8,6 +8,7 @@ class MainConfig(CreatingConfig):
         self.bot = self.Bot(config = self)
         self.logs = self.Logs(config = self)
         self.dabases = self.Dabases(config = self)
+        self.texts = self.Texts(config = self)
     class Bot:
         def __init__(self, config : CreatingConfig) -> None:
             self.token = config.config_field(key = 'token', layer = 'bot', default = 'Здесь ваш Telegram Токен')
@@ -19,3 +20,9 @@ class MainConfig(CreatingConfig):
     class Dabases:
         def __init__(self, config : CreatingConfig) -> None:
             self.main_db = config.config_field(key = 'main_db', layer = 'main_db', default = 'Путь и имя  основной Базы данных')
+    class Texts:
+        def __init__(self, config : CreatingConfig) -> None:
+            self.support_ru = config.config_field(key = 'support_ru', layer = 'texts', default = 'Текст отдела поддержки на русском')
+            self.support_il = config.config_field(key='support_il', layer='texts', default='Текст отдела поддержки на иврите')
+            self.mychannel_ru = config.config_field(key='mychannel_ru', layer='texts', default='Текст отдела «Наш канал» на русском')
+            self.mychannel_il = config.config_field(key='mychannel_il', layer='texts', default='Текст отдела «Наш канал» на иврите')

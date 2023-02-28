@@ -1,19 +1,29 @@
 {
     "created_time": "02/15/23 -- 19:18:24",
     "bot": {
-        "token": "6069344142:AAEjDhSyzAN2L-Qd8a0Gy53wTCFtldAEqvs",
         "admins": [
             {
                 "user_id": 795472601,
                 "nickname": "Мишаня Маслёный"
+            },
+            {
+                "user_id": 705372119,
+                "nickname": "Daniel"
             }
         ],
-        "main_admin": 5689929885
+        "main_admin": 5689929885,
+        "token": "Здесь ваш Telegram Токен"
     },
     "logs": {
         "main_path_logs": "data/logs/"
     },
     "main_db": {
         "main_db": "./data/main_db.db"
+    },
+    "texts": {
+        "mychannel_ru": "Текст отдела «Наш канал» на русском",
+        "mychannel_il": "Текст отдела «Наш канал» на иврите",
+        "support_ru": "Тест раша",
+        "support_il": "Иврит тест"
     }
 }

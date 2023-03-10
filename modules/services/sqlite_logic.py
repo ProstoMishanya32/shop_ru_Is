@@ -195,3 +195,9 @@ class DataBase:
         self.cur.row_factory = dict_factory
         data = self.cur.execute("SELECT * FROM users").fetchall()
         return data
+
+
+    def off_discount(self, item_id):
+        self.cur.row_factory = dict_factory
+        self.cur.execute("UPDATE items SET (discount_len_item, discount) = (?, ?) WHERE item_id = ?",(None, None, item_id))
+        self.connection.commit()

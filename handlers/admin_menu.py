@@ -161,6 +161,22 @@ async def user_category_next_page_discout(call: CallbackQuery, state: FSMContext
     else:
         await call.message.edit_text("<b>🎁 בחר קטגוריית מוצרים:</b>", reply_markup=inline_page.item_category_swipe_fp_discount(remover, check))
 
+@dp.callback_query_handler(CheckAdmin(), text_startswith="buy_item_swipe_discout:", state="*")
+async def item_edit_swipe_discount(call: CallbackQuery, state: FSMContext):
+    category_id = call.data.split(":")[1]
+    remover = int(call.data.split(":")[2])
+    check = db.check_user(call.from_user.id)
+    with suppress(MessageCantBeDeleted):
+        await call.message.delete()
+
+    if check == 'ru':
+        await call.message.answer("<b>📁 Выберите товар 🖍</b>",
+                                     reply_markup=inline_page.item_swipe_fp_discout(remover, check))
+    else:
+        await call.message.answer("<b>📁 בחר מוצר 🖍</b>",
+                                     reply_markup=inline_page.item_swipe_fp_discout(remover, check))
+
+
 @dp.callback_query_handler(text_startswith="buy_category_open_discout:", state="*")
 async def user_purchase_category_open(call: CallbackQuery, state: FSMContext):
     category_id = call.data.split(":")[1]
@@ -378,3 +394,91 @@ async def alerts_finish(call: CallbackQuery, state: FSMContext):
             await call.message.answer("<b>הצלחה!</b>", reply_markup = reply_user.menu((call.from_user.id)))
     else:
         await start_user.user_menu(call.message, check)
+
+
+
+@dp.message_handler(text = ['❌ Удаление скидки', '❌ הסר הנחה'], state = "*")
+async def delete_discount(message: Message, state: FSMContext):
+    check = db.check_user(message.from_user.id)
+    if len(db.get_all_info('category')) >= 1:
+        if check == 'ru':
+            await message.answer("<b>🎁 Выберите категорию товара:</b>", reply_markup=inline_page.item_category_swipe_delete_discount(0, check))
+        else:
+            await message.answer("<b>🎁 בחר קטגוריית מוצרים:</b>",  reply_markup=inline_page.item_category_swipe_delete_discount(0, check))
+    else:
+        if check == 'ru':
+            await message.answer("<b>🎁 Увы, товары в данное время отсутствуют.</b>")
+        else:
+            await message.answer("<b>🎁 אבוי, כרגע אין מוצרים.</b>")
+
+
+@dp.callback_query_handler(text_startswith="buy_category_open_delete_discout:", state="*")
+async def user_delete_discount_category_open(call: CallbackQuery, state: FSMContext):
+    category_id = call.data.split(":")[1]
+    remover = int(call.data.split(":")[2])
+    check = db.check_user(call.from_user.id)
+
+    get_category = db.get_category(category_id=category_id)
+    get_item = db.get_item(category_id=category_id)
+    try:
+        count = len(get_item)
+    except TypeError:
+        count = 0
+    if count >= 1:
+        with suppress(MessageCantBeDeleted):
+            await call.message.delete()
+        if check == 'ru':
+            await call.message.answer(f"<b>🎁 Текущая категория: <code>{get_category['category_name']}</code></b>", reply_markup=inline_page.item_swipe_delete_discout(remover, category_id, check))
+        else:
+            await call.message.answer(f"<b>🎁 קטגוריה נוכחית: <code>{get_category['category_name']}</code></b>", reply_markup=inline_page.item_swipe_delete_discout(remover, category_id, check))
+    else:
+        if remover == "0":
+            if check == 'ru':
+                await call.message.edit_text("<b>🎁 Увы, товары в данное время отсутствуют.</b>")
+                await call.answer("❗ Товары были изменены или удалены")
+            else:
+                await call.message.edit_text("<b>🎁 אבוי, כרגע אין מוצרים.</b>")
+                await call.answer("❗ Товары были изменены или удалены")
+        else:
+            if check == 'ru':
+                await call.answer(f"❕ Товары в категории {get_category['category_name']} отсутствуют")
+            else:
+                await call.answer(f"❕ אין מוצרים בקטגוריה {get_category['category_name']}")
+
+@dp.callback_query_handler(text_startswith="buy_item_open_delete_discout:", state="*")
+async def user_delete_discout_get(call: CallbackQuery, state: FSMContext):
+    item_id = call.data.split(":")[1]
+    check = db.check_user(call.from_user.id)
+
+    db.off_discount(item_id)
+
+    if check == 'ru':
+        await call.message.answer("<b>Успешно 👍</b>", reply_markup=reply_user.menu(call.from_user.id))
+    else:
+        await call.message.answer("<b>בהצלחה 👍</b>", reply_markup=reply_user.menu(call.from_user.id))
+
+
+@dp.callback_query_handler(text_startswith="buy_category_swipe_delete_discout:", state="*")
+async def user_category_next_page_delete_discout(call: CallbackQuery, state: FSMContext):
+    remover = int(call.data.split(":")[1])
+    check = db.check_user(call.from_user.id)
+    if check == 'ru':
+        await call.message.edit_text("<b>🎁 Выберите категорию товара:</b>", reply_markup=inline_page.item_category_swipe_delete_discount(remover, check))
+    else:
+        await call.message.edit_text("<b>🎁 בחר קטגוריית מוצרים:</b>", reply_markup=inline_page.item_category_swipe_delete_discount(remover, check))
+
+
+@dp.callback_query_handler(CheckAdmin(), text_startswith="buy_item_swipe_delete_discout:", state="*")
+async def item_edit_swipe_delete_discount(call: CallbackQuery, state: FSMContext):
+    category_id = call.data.split(":")[1]
+    remover = int(call.data.split(":")[2])
+    check = db.check_user(call.from_user.id)
+    with suppress(MessageCantBeDeleted):
+        await call.message.delete()
+
+    if check == 'ru':
+        await call.message.answer("<b>📁 Выберите товар 🖍</b>",
+                                     reply_markup=inline_page.item_swipe_delete_discout(remover, check))
+    else:
+        await call.message.answer("<b>📁 בחר מוצר 🖍</b>",
+                                     reply_markup=inline_page.item_swipe_delete_discout(remover, check))

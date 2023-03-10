@@ -531,10 +531,10 @@ async def item_edit_swipe(call: CallbackQuery, state: FSMContext):
         await call.message.delete()
 
     if check == 'ru':
-        await call.message.answer("<b>📁 Выберите категорию с нужной позицией 🖍</b>",
+        await call.message.answer("<b>📁 Выберите товар 🖍</b>",
                                      reply_markup=inline_page.item_edit_category_swipe_fp(remover, check))
     else:
-        await call.message.answer("<b>📁 בחר את הקטגוריה עם המיקום הרצוי 🖍</b>",
+        await call.message.answer("<b>📁 בחר מוצר 🖍</b>",
                                      reply_markup=inline_page.item_edit_category_swipe_fp(remover, check))
 
 

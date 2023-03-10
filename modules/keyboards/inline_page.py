@@ -408,3 +408,105 @@ def item_swipe_fp_discout(remover, category_id, check ):
         keyboard.add(ikb("⬅ חזרה ↩", callback_data=f"buy_category_swipe_discout:0"))
 
     return keyboard
+
+
+
+def item_category_swipe_delete_discount(remover, check):
+    get_categories = db.get_all_info('category')
+    keyboard = InlineKeyboardMarkup()
+
+    if remover >= len(get_categories): remover -= 10
+
+    for count, a in enumerate(range(remover, len(get_categories))):
+        if count < 10:
+            keyboard.add(ikb(get_categories[a]['category_name'],
+                             callback_data=f"buy_category_open_delete_discout:{get_categories[a]['category_id']}:0"))
+
+    if len(get_categories) <= 10:
+        pass
+    elif len(get_categories) > 10 and remover < 10:
+        if check == 'ru':
+            keyboard.add(
+                ikb(f"🔸 1/{math.ceil(len(get_categories) / 10)} 🔸", callback_data="..."),
+                ikb("Далее ➡", callback_data=f"buy_category_swipe_delete_discout:{remover + 10}"),
+            )
+        else:
+            keyboard.add(
+                ikb(f"🔸 1/{math.ceil(len(get_categories) / 10)} 🔸", callback_data="..."),
+                ikb("הבא ➡", callback_data=f"buy_category_swipe:{remover + 10}"),
+            )
+    elif remover + 10 >= len(get_categories):
+        if check == 'ru':
+            keyboard.add(
+                ikb("⬅ Назад", callback_data=f"buy_category_swipe_delete_discout:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_categories) / 10)} 🔸", callback_data="..."),
+            )
+        else:
+            keyboard.add(
+                ikb("⬅ חזרה", callback_data=f"buy_category_swipe_delete_discout:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_categories) / 10)} 🔸", callback_data="..."),
+            )
+    else:
+        if check == 'ru':
+            keyboard.add(
+                ikb("⬅ Назад", callback_data=f"buy_category_swipe_delete_discout:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_categories) / 10)} 🔸", callback_data="..."),
+                ikb("Далее ➡", callback_data=f"buy_category_swipe_delete_discout:{remover + 10}"),
+            )
+        else:
+            keyboard.add(
+                ikb("⬅ חזרה", callback_data=f"buy_category_swipe_discout:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_categories) / 10)} 🔸", callback_data="..."),
+                ikb("הבא ➡", callback_data=f"buy_category_swipe_delete_discout:{remover + 10}"),
+            )
+    return keyboard
+
+
+def item_swipe_delete_discout(remover, category_id, check ):
+    get_item = db.get_all_item(category_id=category_id)
+    keyboard = InlineKeyboardMarkup()
+    if remover >= len(get_item): remover -= 10
+
+    for count, a in enumerate(range(remover, len(get_item))):
+        if count < 10:
+            keyboard.add(ikb(
+                f"{get_item[a]['item_name']} | {get_item[a]['item_price']}₪ ",
+                callback_data=f"buy_item_open_delete_discout:{get_item[a]['item_id']}"))
+
+    if len(get_item) <= 10:
+        pass
+    elif len(get_item) > 10 and remover < 10:
+        keyboard.add(
+            ikb(f"🔸 1/{math.ceil(len(get_item) / 10)} 🔸", callback_data="..."),
+            ikb("Далее ➡", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover + 10}"),
+        )
+    elif remover + 10 >= len(get_positions):
+        if check == 'ru':
+            keyboard.add(
+                ikb("⬅ Назад", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_item) / 10)} 🔸", callback_data="..."),
+            )
+        else:
+            keyboard.add(
+                ikb("⬅ חזרה", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_item) / 10)} 🔸", callback_data="..."),
+            )
+    else:
+        if check == 'ru':
+            keyboard.add(
+                ikb("⬅ Назад", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_item) / 10)} 🔸", callback_data="..."),
+                ikb("Далее ➡", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover + 10}"),
+            )
+        else:
+            keyboard.add(
+                ikb("⬅ חזרה", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover - 10}"),
+                ikb(f"🔸 {str(remover + 10)[:-1]}/{math.ceil(len(get_item) / 10)} 🔸", callback_data="..."),
+                ikb("הבא ➡", callback_data=f"buy_item_swipe_delete_discout:{category_id}:{remover + 10}"),
+            )
+    if check == 'ru':
+        keyboard.add(ikb("⬅ Вернуться ↩", callback_data=f"buy_category_swipe_delete_discout:0"))
+    else:
+        keyboard.add(ikb("⬅ חזרה ↩", callback_data=f"buy_category_swipe_delete_discout:0"))
+
+    return keyboard

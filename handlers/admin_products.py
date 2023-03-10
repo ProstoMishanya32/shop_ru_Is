@@ -14,7 +14,7 @@ from modules.utils.const_func import get_unix
 from modules.utils.get_info import get_admin_items
 
 
-@dp.message_handler(CheckAdmin(), text = ['🎁 Управление товарами', '🎁 ניהול סחורה'], state = "*")
+@dp.message_handler(CheckAdmin(), text = ['🎁 Управление товарами', '🎁 ניהול מוצר'], state = "*")
 async def admin_menu_start(message: Message, state: FSMContext):
     await state.finish()
     check = db.check_user(message.from_user.id)

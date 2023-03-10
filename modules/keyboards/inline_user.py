@@ -23,7 +23,7 @@ def item_open(item_id, category_id, remover, check):
     else:
         keyboard = InlineKeyboardMarkup(
         ).add(
-            InlineKeyboardButton("💰 Купить товар", callback_data=f"buy_item_open_finl:{item_id}:{remover}")
+            InlineKeyboardButton("להזמין", callback_data=f"buy_item_open_finl:{item_id}:{remover}")
         ).add(
             InlineKeyboardButton("⬅ חזרה ↩", callback_data=f"buy_category_open:{category_id}:{remover}")
         )

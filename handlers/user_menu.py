@@ -107,7 +107,7 @@ async def user_purchase_position_open(call: CallbackQuery, state: FSMContext):
         if check == 'ru':
             text_description = f"\n📜 Описание:\n{get_item['item_description']}"
         else:
-            text_description = f"\n📜 Описание:\n{get_item['item_description']}"
+            text_description = f"\n📜 תיאור:\n{get_item['item_description']}"
 
     if check == 'ru':
         send_msg = ded(f"""
@@ -204,14 +204,13 @@ async def user_shop(message: Message, state: FSMContext):
                 item_name = data['item_name']
 
             data = db.get_discout(item_id)
-            price = price * int(message.text)
-
+            price = price
             try:
                 if  int(message.text) >= int(data['discount_len_item']):
-                    price = int(price / 100 * int(data['discount']))
+                    price = price - (price / 100 * int(data['discount']))
             except TypeError:
                 pass
-
+            price = price * int(message.text)
             await state.set_state("item_buy")
             await state.update_data(len_item = int(message.text))
             if check == 'ru':
